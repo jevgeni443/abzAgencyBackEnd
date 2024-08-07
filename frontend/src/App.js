@@ -82,7 +82,9 @@ const App = () => {
               <p>
                 {user.firstName} {user.lastName}
               </p>
-              <p>{user.email}</p>
+              <p>
+                {user.email} {user.phone} {user.position}
+              </p>
             </div>
           </div>
         ))}
@@ -106,6 +108,8 @@ const App = () => {
         <input name="firstName" placeholder="First Name" required />
         <input name="lastName" placeholder="Last Name" required />
         <input name="email" type="email" placeholder="Email" required />
+        <input name="phone" placeholder="Phone" />
+        <input name="position" placeholder="Position" />
         <input name="image" type="file" required />
         <button type="submit">Add</button>
       </form>
