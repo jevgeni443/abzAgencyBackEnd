@@ -6,6 +6,8 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
+  const [positions, setPositions] = useState([]);
+  const [selectedPosition, setSelectedPosition] = useState("");
 
   useEffect(() => {
     fetch(`https://server-abz-803d12a8a680.herokuapp.com/users?page=${page}`)
@@ -20,6 +22,13 @@ const App = () => {
       })
       .catch((error) => console.error("Error fetching users:", error));
   }, [page]);
+
+  useEffect(() => {
+    fetch("https://server-abz-803d12a8a680.herokuapp.com/positions")
+      .then((response) => response.json())
+      .then((data) => setPositions(data))
+      .catch((error) => console.error("Error fetching positions:", error));
+  }, []);
 
   const addUser = async (event) => {
     event.preventDefault();
@@ -83,7 +92,8 @@ const App = () => {
                 {user.firstName} {user.lastName}
               </p>
               <p>
-                {user.email} {user.phone} {user.position}
+                {user.email} {user.phone} (ID: {user.positionId}, Position:{" "}
+                {user.position})
               </p>
             </div>
           </div>
@@ -109,7 +119,21 @@ const App = () => {
         <input name="lastName" placeholder="Last Name" required />
         <input name="email" type="email" placeholder="Email" required />
         <input name="phone" placeholder="Phone" />
-        <input name="position" placeholder="Position" />
+        <select
+          name="position"
+          placeholder="Position"
+          required
+          value={selectedPosition}
+          onChange={(e) => setSelectedPosition(e.target.value)}
+        >
+          <option value="">Select position</option>
+          {positions.map((pos) => (
+            <option key={pos.positionId} value={pos.position}>
+              {pos.position}
+            </option>
+          ))}
+        </select>
+
         <input name="image" type="file" required />
         <button type="submit">Add</button>
       </form>
